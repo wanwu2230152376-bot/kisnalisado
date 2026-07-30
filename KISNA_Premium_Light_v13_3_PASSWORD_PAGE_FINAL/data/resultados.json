@@ -1,0 +1,13 @@
+{
+  "casos": [
+    {
+      "titulo": "Alisado Japonés",
+      "detalle": "Cabello afro / muy rizado",
+      "antes": "/assets/resultados/pelo-afro-antes.jpg",
+      "despues": "/assets/resultados/pelo-afro-despues.jpg",
+      "alt_antes": "Cabello afro antes del alisado japonés en KISNA Madrid",
+      "alt_despues": "Cabello afro después del alisado japonés en KISNA Madrid",
+      "publicado": true
+    }
+  ]
+}
