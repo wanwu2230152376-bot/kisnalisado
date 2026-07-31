@@ -8,6 +8,13 @@
       "alt_antes": "Cabello afro antes del alisado japonés en KISNA Madrid",
       "alt_despues": "Cabello afro después del alisado japonés en KISNA Madrid",
       "publicado": true
+    },
+    {
+      "publicado": true,
+      "titulo": "Alisado Keratina",
+      "detalle": "pelo con mechas y muy dañado",
+      "antes": "/assets/resultados/img_8173.jpeg",
+      "despues": "/assets/resultados/img_8175.jpeg"
     }
   ]
 }
