@@ -1,8 +1,0 @@
-[build]
-  command = "node build-resultados.js"
-  publish = "."
-
-[[redirects]]
-  from = "/admin"
-  to = "/admin/"
-  status = 301
