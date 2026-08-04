@@ -103,7 +103,7 @@ a{text-decoration:none;color:inherit}
 .section-title h2{font-size:47px}
 .results-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1450px;margin:auto}
 .comparison{height:320px;position:relative;overflow:hidden;border-radius:8px;border:1px solid #e6d5bc;background:#eee;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:ew-resize}
-.comparison img{position:absolute;inset:0;height:100%;object-fit:cover}
+.comparison img{position:absolute;inset:0;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
 .after-layer{position:absolute;inset:0;overflow:hidden;clip-path:inset(0 0 0 var(--split,50%))}
 .after-layer img{width:100%;left:0}
 .comparison-range{position:absolute;width:1px;height:1px;left:50%;top:50%;opacity:0;pointer-events:none;z-index:4}
@@ -137,8 +137,10 @@ footer{background:#f4eadb;padding:26px 5vw;display:flex;justify-content:space-be
   .hero-actions{flex-direction:column;width:100%}.button{width:100%}.google-rating{font-size:8px;max-width:330px;position:relative;z-index:6}.hero-socials{position:relative;z-index:6;margin-top:14px;flex-wrap:wrap}.hero-socials>span{width:100%}.hero-visual{width:83%;right:-24%;bottom:-12px;height:520px;opacity:.70}
   .benefits{grid-template-columns:repeat(2,1fr);padding:18px 10px}.benefits article{padding:12px 8px;border-bottom:1px solid var(--line)}.benefits b{font-size:23px}.benefits strong{font-size:9px}.benefits span{font-size:7px}
   .results-section,.services-section,.reviews-section{padding:58px 18px}.section-title h2{font-size:39px}
-  .results-grid,.service-grid,.reviews-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px}
-  .comparison-card,.result-awaiting,.service-grid article,.review-card{min-width:86vw;scroll-snap-align:center}
+  .results-grid{display:grid;grid-template-columns:1fr;overflow:visible;padding-bottom:0;gap:34px}
+  .service-grid,.reviews-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px}
+  .comparison-card,.result-awaiting{min-width:0;width:100%}
+  .service-grid article,.review-card{min-width:86vw;scroll-snap-align:center}
   .comparison{height:400px}
   .about-copy{padding:58px 20px}.about-copy h2{font-size:42px}.about-section>img{height:360px}
   .reviews-summary{flex-direction:column;gap:4px;text-align:center}
@@ -543,7 +545,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
 
 
 @media(max-width:600px){
-  .comparison-handle{width:62px;height:62px;font-size:25px;border-width:3px}
+  .comparison-handle{width:72px;height:72px;font-size:29px;border-width:3px}
   .comparison:before{
     content:"Desliza";
     position:absolute;
@@ -562,4 +564,11 @@ html, body { max-width: 100%; overflow-x: hidden; }
     box-shadow:0 4px 12px rgba(0,0,0,.12);
   }
   .comparison.is-dragging:before{opacity:0}
+}
+
+@media(max-width:600px){
+  .results-grid{scroll-snap-type:none!important}
+  .comparison{touch-action:pan-y;overscroll-behavior-x:contain}
+  .comparison:before{top:calc(50% + 50px)}
+  .comparison-card{scroll-snap-align:none}
 }

@@ -15,6 +15,9 @@ document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', () 
 document.querySelectorAll('[data-comparison]').forEach((box) => {
   const range = box.querySelector('.comparison-range');
   let dragging = false;
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchMode = null;
 
   const setSplitFromClientX = (clientX) => {
     const rect = box.getBoundingClientRect();
@@ -24,33 +27,65 @@ document.querySelectorAll('[data-comparison]').forEach((box) => {
     if (range) range.value = String(Math.round(value));
   };
 
-  box.addEventListener('pointerdown', (event) => {
-    if (event.pointerType === 'mouse' && event.button !== 0) return;
+  const beginDrag = (clientX) => {
     dragging = true;
     box.classList.add('is-dragging');
+    setSplitFromClientX(clientX);
+  };
+
+  const endDrag = () => {
+    dragging = false;
+    touchMode = null;
+    box.classList.remove('is-dragging');
+  };
+
+  box.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'touch') return;
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    beginDrag(event.clientX);
     box.setPointerCapture?.(event.pointerId);
-    setSplitFromClientX(event.clientX);
   });
 
   box.addEventListener('pointermove', (event) => {
-    if (!dragging) return;
+    if (!dragging || event.pointerType === 'touch') return;
     setSplitFromClientX(event.clientX);
   });
 
-  const stopDragging = (event) => {
-    if (!dragging) return;
-    dragging = false;
-    box.classList.remove('is-dragging');
-    if (box.hasPointerCapture?.(event.pointerId)) {
-      box.releasePointerCapture(event.pointerId);
-    }
-  };
+  box.addEventListener('pointerup', endDrag);
+  box.addEventListener('pointercancel', endDrag);
+  box.addEventListener('lostpointercapture', endDrag);
 
-  box.addEventListener('pointerup', stopDragging);
-  box.addEventListener('pointercancel', stopDragging);
-  box.addEventListener('lostpointercapture', () => {
-    dragging = false;
-    box.classList.remove('is-dragging');
+  box.addEventListener('touchstart', (event) => {
+    const touch = event.touches[0];
+    if (!touch) return;
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    touchMode = null;
+  }, { passive: true });
+
+  box.addEventListener('touchmove', (event) => {
+    const touch = event.touches[0];
+    if (!touch) return;
+
+    const dx = touch.clientX - touchStartX;
+    const dy = touch.clientY - touchStartY;
+
+    if (touchMode === null && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+      touchMode = Math.abs(dx) > Math.abs(dy) ? 'horizontal' : 'vertical';
+      if (touchMode === 'horizontal') beginDrag(touch.clientX);
+    }
+
+    if (touchMode === 'horizontal') {
+      event.preventDefault();
+      setSplitFromClientX(touch.clientX);
+    }
+  }, { passive: false });
+
+  box.addEventListener('touchend', endDrag, { passive: true });
+  box.addEventListener('touchcancel', endDrag, { passive: true });
+
+  box.addEventListener('click', (event) => {
+    if (!dragging) setSplitFromClientX(event.clientX);
   });
 
   range?.addEventListener('input', () => {
