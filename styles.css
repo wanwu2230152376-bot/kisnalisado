@@ -102,12 +102,12 @@ a{text-decoration:none;color:inherit}
 .section-title p{text-transform:uppercase;letter-spacing:.24em;color:var(--gold-dark);font-size:9px;font-weight:700}
 .section-title h2{font-size:47px}
 .results-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1450px;margin:auto}
-.comparison{height:320px;position:relative;overflow:hidden;border-radius:8px;border:1px solid #e6d5bc;background:#eee}
+.comparison{height:320px;position:relative;overflow:hidden;border-radius:8px;border:1px solid #e6d5bc;background:#eee;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:ew-resize}
 .comparison img{position:absolute;inset:0;height:100%;object-fit:cover}
 .after-layer{position:absolute;inset:0;overflow:hidden;clip-path:inset(0 0 0 var(--split,50%))}
 .after-layer img{width:100%;left:0}
-.comparison-range{position:absolute;inset:0;width:100%;height:100%;opacity:0;z-index:4;cursor:ew-resize}
-.comparison-handle{position:absolute;left:var(--split,50%);top:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:#fff;color:#7c5a2c;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 4px 16px rgba(0,0,0,.14)}
+.comparison-range{position:absolute;width:1px;height:1px;left:50%;top:50%;opacity:0;pointer-events:none;z-index:4}
+.comparison-handle{position:absolute;left:var(--split,50%);top:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:#fff;color:#7c5a2c;display:flex;align-items:center;justify-content:center;z-index:5;box-shadow:0 6px 20px rgba(0,0,0,.20);border:2px solid rgba(200,155,82,.45);font-size:20px;font-weight:700;pointer-events:none;transition:transform .12s ease,box-shadow .12s ease}.comparison.is-dragging .comparison-handle{transform:translate(-50%,-50%) scale(1.1);box-shadow:0 8px 26px rgba(0,0,0,.28)}
 .comparison:after{content:"";position:absolute;left:var(--split,50%);top:0;bottom:0;width:1px;background:#fff;z-index:2}
 .label{position:absolute;z-index:3;bottom:12px;font-size:8px;letter-spacing:.16em;color:#fff;font-weight:700;text-shadow:0 1px 4px #000}.before-label{left:15px}.after-label{right:15px}
 .comparison-card h3{text-align:center;font-family:"Cormorant Garamond",serif;font-size:21px;margin:14px 0 2px}
@@ -539,4 +539,27 @@ html, body { max-width: 100%; overflow-x: hidden; }
   .hero-visual{z-index:0;opacity:.42}
   footer{position:relative;z-index:3}
   .footer-socials{margin-top:20px}
+}
+
+
+@media(max-width:600px){
+  .comparison-handle{width:62px;height:62px;font-size:25px;border-width:3px}
+  .comparison:before{
+    content:"Desliza";
+    position:absolute;
+    left:50%;
+    top:calc(50% + 43px);
+    transform:translateX(-50%);
+    z-index:5;
+    padding:5px 10px;
+    border-radius:999px;
+    background:rgba(255,255,255,.90);
+    color:#76572d;
+    font-size:9px;
+    font-weight:700;
+    letter-spacing:.08em;
+    pointer-events:none;
+    box-shadow:0 4px 12px rgba(0,0,0,.12);
+  }
+  .comparison.is-dragging:before{opacity:0}
 }

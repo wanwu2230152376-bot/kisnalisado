@@ -12,9 +12,50 @@ menuButton?.addEventListener('click', () => {
 });
 document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', () => nav?.classList.remove('open')));
 
-document.querySelectorAll('[data-comparison]').forEach(box => {
+document.querySelectorAll('[data-comparison]').forEach((box) => {
   const range = box.querySelector('.comparison-range');
-  range?.addEventListener('input', () => box.style.setProperty('--split', `${range.value}%`));
+  let dragging = false;
+
+  const setSplitFromClientX = (clientX) => {
+    const rect = box.getBoundingClientRect();
+    if (!rect.width) return;
+    const value = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+    box.style.setProperty('--split', `${value}%`);
+    if (range) range.value = String(Math.round(value));
+  };
+
+  box.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    dragging = true;
+    box.classList.add('is-dragging');
+    box.setPointerCapture?.(event.pointerId);
+    setSplitFromClientX(event.clientX);
+  });
+
+  box.addEventListener('pointermove', (event) => {
+    if (!dragging) return;
+    setSplitFromClientX(event.clientX);
+  });
+
+  const stopDragging = (event) => {
+    if (!dragging) return;
+    dragging = false;
+    box.classList.remove('is-dragging');
+    if (box.hasPointerCapture?.(event.pointerId)) {
+      box.releasePointerCapture(event.pointerId);
+    }
+  };
+
+  box.addEventListener('pointerup', stopDragging);
+  box.addEventListener('pointercancel', stopDragging);
+  box.addEventListener('lostpointercapture', () => {
+    dragging = false;
+    box.classList.remove('is-dragging');
+  });
+
+  range?.addEventListener('input', () => {
+    box.style.setProperty('--split', `${range.value}%`);
+  });
 });
 
 // Keep the mobile review carousel aligned to the first card after refresh/back navigation.
